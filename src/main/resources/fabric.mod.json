@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "proxlib",
+  "version": "${version}",
+  "name": "ProxLib",
+  "description": "Library that enables close by players to communicate with each other autonomously",
+  "authors": [ "EnderKill98" ],
+  "contact": {
+    "homepage": "https://github.com/EnderKill98/ProxLib",
+    "sources": "https://github.com/EnderKill98/ProxLib.git",
+    "issues": "https://github.com/EnderKill98/ProxLib/issues",
+    "discord": "@enderkill98"
+  },
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": [ "me.enderkill98.proxlib.client.ProxLib" ]
+  },
+  "mixins": [ "proxlib.mixins.json" ],
+  "depends": {
+    "java": ">=21",
+    "minecraft": "${minecraft_version}",
+    "fabricloader": ">=${loader_version}"
+  }
+}
