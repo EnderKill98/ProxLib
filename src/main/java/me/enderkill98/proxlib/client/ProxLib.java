@@ -1,6 +1,7 @@
 package me.enderkill98.proxlib.client;
 
 import me.enderkill98.proxlib.ProxDataUnits;
+import me.enderkill98.proxlib.ProxPacketIdentifier;
 import me.enderkill98.proxlib.ProxPackets;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.MinecraftClient;
@@ -29,8 +30,8 @@ public class ProxLib implements ClientModInitializer {
         return REGISTERED_GLOBAL_HANDLERS.remove(handler);
     }
 
-    public static int sendPacket(MinecraftClient client, short id, byte[] data) {
-        return sendPacket(client, id, data, false);
+    public static int sendPacket(MinecraftClient client, ProxPacketIdentifier identifier, byte[] data) {
+        return sendPacket(client, identifier, data, false);
     }
 
     public static List<ProxChatGlobalHandler> getGlobalHandlers() {
@@ -39,14 +40,14 @@ public class ProxLib implements ClientModInitializer {
 
     /**
      * Helper-function to easier send out packets.
-     * @param id Packet ID
+     * @param identifier Packet Identifier
      * @param data Packet Data
      * @param dryRun Do not send any actual data
      * @return The amount of Minecraft-Packets produced for sending this packet
      */
-    public static int sendPacket(MinecraftClient client, short id, byte[] data, boolean dryRun) {
+    public static int sendPacket(MinecraftClient client, ProxPacketIdentifier identifier, byte[] data, boolean dryRun) {
         int packets = 0;
-        for(int pdu : ProxPackets.fullyEncodeProxPacketToProxDataUnits(id, data)) {
+        for(int pdu : ProxPackets.fullyEncodeProxPacketToProxDataUnits(identifier, data)) {
             packets++;
             if(!dryRun) {
                 client.getNetworkHandler().sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.ABORT_DESTROY_BLOCK, ProxDataUnits.proxDataUnitToBlockPos(client.player, pdu), Direction.DOWN));

@@ -1,9 +1,5 @@
 package me.enderkill98.proxlib;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
-import net.minecraft.util.math.Direction;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +9,7 @@ public class ProxPackets {
     public static int[] PACKET_PDU_MAGIC = new int[]{ProxDataUnits.getMaxProxDataUnit() - 1, ProxDataUnits.getMaxProxDataUnit() - 19};
 
     // This is still missing the MAGIC, which can't be encoded here
-    public static byte[] encodeProxPacket(short id, byte[] data) {
+    private static byte[] encodeProxPacket(ProxPacketIdentifier identifier, byte[] data) {
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         int length = 2 /*Id*/ + data.length;
 
@@ -23,8 +19,9 @@ public class ProxPackets {
         bout.write((byte) (length & 0xFF));
 
         // Write id
-        bout.write((byte) ((id >> 8) & 0xFF));
-        bout.write((byte) (id & 0xFF));
+        int vendorAndPacketId = identifier.pack();
+        bout.write((byte) ((vendorAndPacketId >> 8) & 0xFF));
+        bout.write((byte) (vendorAndPacketId & 0xFF));
 
         // Write data
         try {
@@ -36,12 +33,12 @@ public class ProxPackets {
         return bout.toByteArray();
     }
 
-    public static List<Integer> fullyEncodeProxPacketToProxDataUnits(short id, byte[] data) {
+    public static List<Integer> fullyEncodeProxPacketToProxDataUnits(ProxPacketIdentifier identifier, byte[] data) {
         ArrayList<Integer> pdus = new ArrayList<>();
         for (int pdu : PACKET_PDU_MAGIC)
             pdus.add(pdu);
 
-        byte[] encoded = encodeProxPacket(id, data);
+        byte[] encoded = encodeProxPacket(identifier, data);
         pdus.addAll(ProxDataUnits.bytesToProxDataUnits(encoded));
         return pdus;
     }

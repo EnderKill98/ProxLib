@@ -110,19 +110,20 @@ public class ProxPlayerReader {
         }else if(dataHeader != null && dataHeader.getRight() != null && totalBytes >= 3+dataHeader.getLeft()) {
             // All data got read
             int expectedLength = dataHeader.getLeft();
-            @Nullable Short id = dataHeader.getRight();
-            if(expectedLength < 2 || id == null) {
-                LOGGER.info("Packet received from " + player.getGameProfile().getName() + " was too small (length was: " + expectedLength + " and id " + id + ")!");
+            @Nullable Short packedId = dataHeader.getRight();
+            if(expectedLength < 2 || packedId == null) {
+                LOGGER.info("Packet received from " + player.getGameProfile().getName() + " was too small (length was: " + expectedLength + " and packed Id " + packedId + ")!");
                 dataReader = null;
                 dataHeader = null;
                 return;
             }
 
             byte[] data = Arrays.copyOfRange(dataReader.getBytes(), 5, expectedLength+3);
-            LOGGER.info("Received a prox packet with id " + id + " and " + data.length + " bytes of data.");
+            ProxPacketIdentifier identifier = ProxPacketIdentifier.ofPacked(packedId);
+            LOGGER.info("Received a prox packet with vendor id " + identifier.vendorId() + ", packet id " + identifier.packetId() + " and " + data.length + " bytes of data.");
             for(ProxPacketReceiveHandler handler : handlers) {
                 try {
-                    handler.onReceived(id, data);
+                    handler.onReceived(identifier, data);
                 }catch (Exception ex) {
                     LOGGER.error("Failed when running some handler!", ex);
                 }
