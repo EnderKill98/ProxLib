@@ -3,7 +3,7 @@
   "id": "${id}",
   "version": "${version}",
   "name": "${name}",
-  "description": "Library that enables close by players to communicate with each other autonomously",
+  "description": "Library that enables close-by players to communicate with each other autonomously",
   "authors": [ "EnderKill98" ],
   "contact": {
     "homepage": "https://github.com/EnderKill98/ProxLib",
