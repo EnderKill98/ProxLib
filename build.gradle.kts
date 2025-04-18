@@ -120,16 +120,6 @@ publishMods {
 */
 
 publishing {
-    repositories {
-        maven("https://maven.pkg.github.com/EnderKill98/ProxLib") {
-            name = "GitHubPackages"
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
-            }
-        }
-    }
-
     publications {
         create<MavenPublication>("mavenJava") {
             groupId = "${property("mod.group")}.${mod.id}"
