@@ -44,4 +44,9 @@ public record ProxPacketIdentifier(short vendorId, byte packetId) {
         validate();
         return (short) ((vendorId << PACKET_ID_BITS) | packetId);
     }
+
+    @Override
+    public int hashCode() {
+        return pack();
+    }
 }

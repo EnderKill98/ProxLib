@@ -14,13 +14,13 @@ import java.util.Arrays;
 public class ProxPlayerReader {
     private static final Logger LOGGER = LoggerFactory.getLogger("ProxLib/PlayerReader");
 
-    private PlayerEntity player;
+    private final PlayerEntity player;
     private int magicBytesPos = 0;
     private @Nullable BlockPos assumedPlayerEyeBlockPos = null;
     private ProxDataUnitReader dataReader = null;
     private Pair<Integer/*Length (3 byte)*/, @Nullable Short/*Id (2 byte)*/> dataHeader = null;
     private long lastReceivedAt = -1L;
-    private ArrayList<ProxPacketReceiveHandler> handlers = new ArrayList<>();
+    private final ArrayList<ProxPacketReceiveHandler> handlers = new ArrayList<>();
 
     public ProxPlayerReader(PlayerEntity player) {
         this.player = player;
@@ -112,7 +112,7 @@ public class ProxPlayerReader {
             int expectedLength = dataHeader.getLeft();
             @Nullable Short packedId = dataHeader.getRight();
             if(expectedLength < 2 || packedId == null) {
-                LOGGER.info("Packet received from " + player.getGameProfile().getName() + " was too small (length was: " + expectedLength + " and packed Id " + packedId + ")!");
+                LOGGER.warn("Packet received from {} was too small (length was: {} and packed Id {})!", player.getGameProfile().getName(), expectedLength, packedId);
                 dataReader = null;
                 dataHeader = null;
                 return;
@@ -120,10 +120,10 @@ public class ProxPlayerReader {
 
             byte[] data = Arrays.copyOfRange(dataReader.getBytes(), 5, expectedLength+3);
             ProxPacketIdentifier identifier = ProxPacketIdentifier.ofPacked(packedId);
-            LOGGER.info("Received a prox packet with vendor id " + identifier.vendorId() + ", packet id " + identifier.packetId() + " and " + data.length + " bytes of data.");
+            //LOGGER.info("Received a prox packet with vendor id " + identifier.vendorId() + ", packet id " + identifier.packetId() + " and " + data.length + " bytes of data.");
             for(ProxPacketReceiveHandler handler : handlers) {
                 try {
-                    handler.onReceived(identifier, data);
+                    handler.onReceived(player, identifier, data);
                 }catch (Exception ex) {
                     LOGGER.error("Failed when running some handler!", ex);
                 }
