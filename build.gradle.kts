@@ -25,19 +25,6 @@ version = "${mod.version}+$mcVersion"
 group = mod.group
 base { archivesName.set(mod.id) }
 
-/*
-loom {
-    splitEnvironmentSourceSets()
-
-    mods {
-        create("template") {
-            sourceSet(sourceSets["main"])
-            sourceSet(sourceSets["client"])
-        }
-    }
-}
-*/
-
 repositories {
     fun strictMaven(url: String, alias: String, vararg groups: String) = exclusiveContent {
         forRepository { maven(url) { name = alias } }
@@ -138,14 +125,14 @@ publishMods {
     }
 }
 */
-/*
+
 publishing {
     repositories {
-        maven("...") {
-            name = "..."
-            credentials(PasswordCredentials::class.java)
-            authentication {
-                create<BasicAuthentication>("basic")
+        maven("https://maven.pkg.github.com/EnderKill98/ProxLib") {
+            name = "GitHubPackages"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
             }
         }
     }
@@ -160,4 +147,3 @@ publishing {
         }
     }
 }
-*/
