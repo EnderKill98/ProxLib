@@ -86,13 +86,6 @@ tasks.processResources {
     filesMatching("fabric.mod.json") { expand(map) }
 }
 
-tasks.register<Copy>("buildAndCollect") {
-    group = "build"
-    from(tasks.remapJar.get().archiveFile)
-    into(rootProject.layout.buildDirectory.file("libs/${mod.version}"))
-    dependsOn("build")
-}
-
 /*
 publishMods {
     file = tasks.remapJar.get().archiveFile
