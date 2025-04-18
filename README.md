@@ -47,13 +47,23 @@ Mods may bundle this library, so you might never be aware of this being included
 
 Add ProxLib as a dependency in your `build.gradle`:
 
-```gradle
-repositories {
-    // Add repository info here
+```groovy
+exclusiveContent {
+    forRepository {
+        maven {
+            name = "Modrinth"
+            url = "https://api.modrinth.com/maven"
+        }
+    }
+    filter {
+        includeGroup "maven.modrinth"
+    }
 }
 
 dependencies {
-    modImplementation "me.enderkill98:proxlib:1.0.0"
+    // E.g. for MC Version 1.21.4 (make sure to check which is the most recent version).
+    // Remove the "include" if you don't wish bundling this mod directly into yours (currently <20 KiB).
+    include modApi("maven.modrinth:proxlib:0.2.0+1.21.4")
 }
 ```
 
@@ -65,6 +75,13 @@ In your `fabric.mod.json`, add:
 }
 ```
 
+## Building
+
+If you wish to build this mod, you should be aware of:
+
+- This project uses [Stonecutter](https://stonecutter.kikugie.dev/) to produce multiple versions at once
+- You should **not run** the `build` task, but rather `chiseledBuild` (inside category `project`)
+- See their documentation for more information
 
 ## Versioning
 
