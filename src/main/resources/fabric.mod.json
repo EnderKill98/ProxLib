@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "proxlib",
+  "id": "${id}",
   "version": "${version}",
-  "name": "ProxLib",
+  "name": "${name}",
   "description": "Library that enables close by players to communicate with each other autonomously",
   "authors": [ "EnderKill98" ],
   "contact": {
@@ -19,7 +19,7 @@
   "mixins": [ "proxlib.mixins.json" ],
   "depends": {
     "java": ">=21",
-    "minecraft": "${minecraft_version}",
-    "fabricloader": ">=${loader_version}"
+    "minecraft": "${mcdep}",
+    "fabricloader": ">=0.15"
   }
 }
