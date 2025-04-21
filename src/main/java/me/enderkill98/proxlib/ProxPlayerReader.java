@@ -105,7 +105,7 @@ public class ProxPlayerReader {
         }else if(totalBytes >= 5 && dataHeader != null && dataHeader.getRight() == null) {
             // Got enough data to figure out the id
             byte[] bytes = dataReader.getBytes();
-            short id = (short) (bytes[3+0] << 8 | bytes[3+1]);
+            short id = (short) (((bytes[3+0] & 0xFF) << 8) | (bytes[3+1] & 0xFF));
             dataHeader.setRight(id);
         }else if(dataHeader != null && dataHeader.getRight() != null && totalBytes >= 3+dataHeader.getLeft()) {
             // All data got read
