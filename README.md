@@ -63,7 +63,7 @@ exclusiveContent {
 dependencies {
     // E.g. for MC Version 1.21.4 (make sure to check which is the most recent version).
     // Remove the "include" if you don't wish bundling this mod directly into yours (currently <20 KiB).
-    include modApi("maven.modrinth:proxlib:0.2.0+1.21.4")
+    include modApi("maven.modrinth:proxlib:0.2.2+1.21.6")
 }
 ```
 
@@ -71,13 +71,13 @@ In your `fabric.mod.json`, add:
 
 ```json
 "depends": {
-    "proxlib": ">=0.2.0"
+    "proxlib": ">=0.2.1"
 }
 ```
 
 ## Building
 
-If you wish to build this mod, you should be aware of:
+If you wish to build this mod, you should **be aware**:
 
 - This project uses [Stonecutter](https://stonecutter.kikugie.dev/) to produce multiple versions at once
 - You should **not run** the `build` task, but rather `chiseledBuild` (inside category `project`)
