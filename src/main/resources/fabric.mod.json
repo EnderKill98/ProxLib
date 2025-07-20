@@ -20,6 +20,6 @@
   "depends": {
     "java": "${java}",
     "minecraft": "${mcdep}",
-    "fabricloader": ">=0.15"
+    "fabricloader": ">=0.14"
   }
 }
