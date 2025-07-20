@@ -10,6 +10,7 @@ class ModData {
     val name = property("mod.name").toString()
     val version = property("mod.version").toString()
     val group = property("mod.group").toString()
+    val java = property("mod.java").toString()
 }
 
 class ModDependencies {
@@ -75,12 +76,14 @@ tasks.processResources {
     inputs.property("name", mod.name)
     inputs.property("version", mod.version)
     inputs.property("mcdep", mcDep)
+    inputs.property("java", mod.java)
 
     val map = mapOf(
         "id" to mod.id,
         "name" to mod.name,
         "version" to mod.version,
-        "mcdep" to mcDep
+        "mcdep" to mcDep,
+        "java" to mod.java
     )
 
     filesMatching("fabric.mod.json") { expand(map) }

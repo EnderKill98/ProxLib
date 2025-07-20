@@ -18,7 +18,7 @@
   },
   "mixins": [ "proxlib.mixins.json" ],
   "depends": {
-    "java": ">=21",
+    "java": "${java}",
     "minecraft": "${mcdep}",
     "fabricloader": ">=0.15"
   }
