@@ -62,8 +62,8 @@ exclusiveContent {
 
 dependencies {
     // E.g. for MC Version 1.21.4 (make sure to check which is the most recent version).
-    // Remove the "include" if you don't wish bundling this mod directly into yours (currently <20 KiB).
-    include modApi("maven.modrinth:proxlib:0.2.2+1.21.6")
+    // Remove the "include" if you don't wish bundling this mod directly into yours (currently <30 KiB).
+    include modApi("maven.modrinth:proxlib:0.2.4+1.21")
 }
 ```
 
@@ -71,7 +71,7 @@ In your `fabric.mod.json`, add:
 
 ```json
 "depends": {
-    "proxlib": ">=0.2.1"
+    "proxlib": ">=0.2.0"
 }
 ```
 
