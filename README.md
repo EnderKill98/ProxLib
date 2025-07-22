@@ -195,7 +195,7 @@ Note: ProxChat has Vendor ID 0 because at the time the ID was not yet split into
 
 ## Integration with other Languages
 
-[ItzN00bPvP](https://github.com/ItzN00bPvP) developed a basic library for **Rust** that is compatible with this (crates.io: [proxchat](https://crates.io/crates/proxchat), repo: [proxchat-rs](https://github.com/ItzN00bPvP/proxchat-rs)). So this is hand if you want your e.g. [azalea](https://github.com/azalea-rs/azalea)-bot to send ProxChat messages.
+[ItzN00bPvP](https://github.com/ItzN00bPvP) developed a basic library for **Rust** that is compatible with this (crates.io: [proxchat](https://crates.io/crates/proxchat), repo: [proxchat-rs](https://github.com/ItzN00bPvP/proxchat-rs)). So this is handy if you want your e.g. [azalea](https://github.com/azalea-rs/azalea)-bot to send ProxChat messages.
 
 
 ## Credits
