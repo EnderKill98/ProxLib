@@ -4,6 +4,7 @@
   "version": "${version}",
   "name": "${name}",
   "description": "Library that enables close-by players to communicate with each other autonomously",
+  "icon": "assets/proxlib/Icon_x128_pngquant.png",
   "authors": [ "EnderKill98" ],
   "contact": {
     "homepage": "https://github.com/EnderKill98/ProxLib",
