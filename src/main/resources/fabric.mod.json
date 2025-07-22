@@ -16,6 +16,9 @@
   "entrypoints": {
     "client": [ "me.enderkill98.proxlib.client.ProxLib" ]
   },
+  "custom": {
+    "modmenu": { "badges": [ "library" ] }
+  },
   "mixins": [ "proxlib.mixins.json" ],
   "depends": {
     "java": "${java}",
