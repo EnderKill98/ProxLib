@@ -181,14 +181,16 @@ public class MyAwesomeMod implements ClientModInitializer {
 | Mod         | Vendor ID | Packet ID |  Name            | Description                                                                       | Link             |
 |-------------|-----------|-----------|------------------|-----------------------------------------------------------------------------------|------------------|
 | [ProxChat]  | 0         | 1         | Chat             | Simple chat message in chat (type`% <msg>` with mod).                             | [PC-Chat]        |
-| [ProxChat]  | 0         | 2         | PatPat-PatEntity | Petting someone (will get transferred to PatPat)                                  | [PC-Pat]         |
+| [ProxChat]  | 0         | 2         | PatPat-PatEntity | Petting someone (legcay)                                                          | [PC-Pat]         |
 | [ProxChat]  | 0         | 3         | EmoteCraft       | Play / Repeat / Stop own Emotes                                                   | [PC-Emote]       |
 | [ProxChat]  | 0         | 4         | TextDisplay      | Show one or more customizable text displays to others (type `%% <msg>` with mod). | [PC-TextDisplay] |
+| [PatPat]    | 2         | 0         | Pat              | Patting someone                                                                   | [PP-Pat]         |
 
 [PC-Chat]: https://github.com/EnderKill98/ProxChat/blob/f38e5ef553d0594ff6c7b7f8b22a200f08cb2500/src/client/java/me/enderkill98/proxchat/Packets.java#L58
 [PC-Pat]: https://github.com/EnderKill98/ProxChat/blob/f38e5ef553d0594ff6c7b7f8b22a200f08cb2500/src/client/java/me/enderkill98/proxchat/Packets.java#L86
 [PC-Emote]: https://github.com/EnderKill98/ProxChat/blob/f38e5ef553d0594ff6c7b7f8b22a200f08cb2500/src/client/java/me/enderkill98/proxchat/Packets.java#L120
 [PC-TextDisplay]: https://github.com/EnderKill98/ProxChat/blob/f38e5ef553d0594ff6c7b7f8b22a200f08cb2500/src/client/java/me/enderkill98/proxchat/Packets.java#L172
+[PP-Pat]: https://github.com/LopyMine/PatPat/blob/master/src/main/java/net/lopymine/patpat/client/packet/PatPatClientProxLibPacketManager.java
 
 Note: ProxChat has Vendor ID 0 because at the time the ID was not yet split into Vendor/Packet ID (and this library was part of ProxChat). So the numbers starting from 1 where used which is effectively Vendor ID 0 and is kept for backwards compatibility to old versions of ProxChat.
 
@@ -204,3 +206,4 @@ Developed by EnderKill98, the foundation was found randomly together with [ItzN0
 
 
 [ProxChat]: https://github.com/EnderKill98/ProxChat
+[PatPat]: https://github.com/LopyMine/PatPat
