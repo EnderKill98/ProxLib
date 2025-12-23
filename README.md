@@ -5,7 +5,7 @@
 [![Modrinth](https://img.shields.io/modrinth/v/hOMvyVn6?color=00AF5C&label=Modrinth&logo=modrinth)](https://modrinth.com/mod/proxlib)
 
 [![Fabric API](https://img.shields.io/badge/Fabric%20API-Not_Needed-brightgreen)](https://fabricmc.net/)
-[![Minecraft](https://img.shields.io/badge/Minecraft-1.20_to_1.21.8-52a435)](https://minecraft.net/)
+[![Minecraft](https://img.shields.io/badge/Minecraft-1.20_to_1.21.11-52a435)](https://minecraft.net/)
 
 ProxLib is a library that enables proximity-based communication between players in Minecraft. It allows nearby players to directly exchange data with each other through the server without the server needing to have andy mods or plugins installed to relay this data.
 
