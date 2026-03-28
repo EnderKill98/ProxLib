@@ -1,9 +1,9 @@
 package me.enderkill98.proxlib;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.packet.s2c.play.BlockBreakingProgressS2CPacket;
-import net.minecraft.util.Pair;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
+import net.minecraft.util.Tuple;
+import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,19 +14,19 @@ import java.util.Arrays;
 public class ProxPlayerReader {
     private static final Logger LOGGER = LoggerFactory.getLogger("ProxLib/PlayerReader");
 
-    private final PlayerEntity player;
+    private final Player player;
     private int magicBytesPos = 0;
     private @Nullable BlockPos assumedPlayerEyeBlockPos = null;
     private ProxDataUnitReader dataReader = null;
-    private Pair<Integer/*Length (3 byte)*/, @Nullable Short/*Id (2 byte)*/> dataHeader = null;
+    private Tuple<Integer/*Length (3 byte)*/, @Nullable Short/*Id (2 byte)*/> dataHeader = null;
     private long lastReceivedAt = -1L;
     private final ArrayList<ProxPacketReceiveHandler> handlers = new ArrayList<>();
 
-    public ProxPlayerReader(PlayerEntity player) {
+    public ProxPlayerReader(Player player) {
         this.player = player;
     }
 
-    public PlayerEntity getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
@@ -34,7 +34,7 @@ public class ProxPlayerReader {
         handlers.add(handler);
     }
 
-    public void handle(BlockBreakingProgressS2CPacket packet) {
+    public void handle(ClientboundBlockDestructionPacket packet) {
         final long now = System.currentTimeMillis();
         if (lastReceivedAt != -1L && now - lastReceivedAt > 3000) {
             magicBytesPos = 0;
@@ -45,7 +45,7 @@ public class ProxPlayerReader {
         lastReceivedAt = now;
 
         if (packet.getProgress() != 255) return; // We only care about ABORT_BLOCK_BREAKs
-        if (packet.getEntityId() != player.getId()) return; // Not for this player
+        if (packet.getId() != player.getId()) return; // Not for this player
 
         // Mid-MagicByte parsing
         if (dataReader == null && assumedPlayerEyeBlockPos != null && magicBytesPos > 0 && magicBytesPos < ProxPackets.PACKET_PDU_MAGIC.length) {
@@ -101,16 +101,16 @@ public class ProxPlayerReader {
             byte[] bytes = dataReader.getBytes();
             // If not "& 0xFF"'ing, any byte with the highest bit in a bight can make the whole Integer negative for some reason!!!!!!!!
             int expectedLength = ((bytes[0] & 0xFF) << 16) | ((bytes[1] & 0xFF) << 8) | (bytes[2] & 0xFF);
-            dataHeader = new Pair<>(expectedLength, null);
-        }else if(totalBytes >= 5 && dataHeader != null && dataHeader.getRight() == null) {
+            dataHeader = new Tuple<>(expectedLength, null);
+        }else if(totalBytes >= 5 && dataHeader != null && dataHeader.getB() == null) {
             // Got enough data to figure out the id
             byte[] bytes = dataReader.getBytes();
             short id = (short) (((bytes[3+0] & 0xFF) << 8) | (bytes[3+1] & 0xFF));
-            dataHeader.setRight(id);
-        }else if(dataHeader != null && dataHeader.getRight() != null && totalBytes >= 3+dataHeader.getLeft()) {
+            dataHeader.setB(id);
+        }else if(dataHeader != null && dataHeader.getB() != null && totalBytes >= 3+dataHeader.getA()) {
             // All data got read
-            int expectedLength = dataHeader.getLeft();
-            @Nullable Short packedId = dataHeader.getRight();
+            int expectedLength = dataHeader.getA();
+            @Nullable Short packedId = dataHeader.getB();
             if(expectedLength < 2 || packedId == null) {
                 LOGGER.warn("Packet received from {} was too small (length was: {} and packed Id {})!", player.getGameProfile().getName(), expectedLength, packedId);
                 dataReader = null;

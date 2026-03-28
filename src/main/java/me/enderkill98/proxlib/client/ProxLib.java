@@ -5,9 +5,9 @@ import me.enderkill98.proxlib.ProxPacketIdentifier;
 import me.enderkill98.proxlib.ProxPacketReceiveHandler;
 import me.enderkill98.proxlib.ProxPackets;
 import net.fabricmc.api.ClientModInitializer;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
-import net.minecraft.util.math.Direction;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.Direction;
+import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,7 +58,7 @@ public class ProxLib implements ClientModInitializer {
         return Collections.unmodifiableList(REGISTERED_SPECIFIC_HANDLERS.getOrDefault(identifier, new ArrayList<>(0)));
     }
 
-    public static int sendPacket(MinecraftClient client, ProxPacketIdentifier identifier, byte[] data) {
+    public static int sendPacket(Minecraft client, ProxPacketIdentifier identifier, byte[] data) {
         return sendPacket(client, identifier, data, false);
     }
 
@@ -69,12 +69,12 @@ public class ProxLib implements ClientModInitializer {
      * @param dryRun Do not send any actual data
      * @return The amount of Minecraft-Packets produced for sending this packet
      */
-    public static int sendPacket(MinecraftClient client, ProxPacketIdentifier identifier, byte[] data, boolean dryRun) {
+    public static int sendPacket(Minecraft client, ProxPacketIdentifier identifier, byte[] data, boolean dryRun) {
         int packets = 0;
         for(int pdu : ProxPackets.fullyEncodeProxPacketToProxDataUnits(identifier, data)) {
             packets++;
             if(!dryRun) {
-                client.getNetworkHandler().sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.ABORT_DESTROY_BLOCK, ProxDataUnits.proxDataUnitToBlockPos(client.player, pdu), Direction.DOWN));
+                client.getConnection().send(new ServerboundPlayerActionPacket(ServerboundPlayerActionPacket.Action.ABORT_DESTROY_BLOCK, ProxDataUnits.proxDataUnitToBlockPos(client.player, pdu), Direction.DOWN));
             }
         }
         return packets;

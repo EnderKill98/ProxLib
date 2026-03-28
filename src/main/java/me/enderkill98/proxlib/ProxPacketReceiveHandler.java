@@ -1,7 +1,7 @@
 package me.enderkill98.proxlib;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 
 public interface ProxPacketReceiveHandler {
-    void onReceived(PlayerEntity sender, ProxPacketIdentifier identifier, byte[] data);
+    void onReceived(Player sender, ProxPacketIdentifier identifier, byte[] data);
 }

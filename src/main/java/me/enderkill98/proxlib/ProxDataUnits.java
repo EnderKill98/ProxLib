@@ -1,9 +1,9 @@
 package me.enderkill98.proxlib;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,11 +14,11 @@ public class ProxDataUnits {
 
     private static BlockPos[] createAllOffsets() {
         // All tested offsets have to be in reach of all these positions
-        final ArrayList<Vec3d> originPositions = new ArrayList<>();
+        final ArrayList<Vec3> originPositions = new ArrayList<>();
         for (int xOffset : new int[]{0, 1})
             for (int yOffset : new int[]{0, 1})
                 for (int zOffset : new int[]{0, 1})
-                    originPositions.add(new Vec3d(xOffset, yOffset, zOffset));
+                    originPositions.add(new Vec3(xOffset, yOffset, zOffset));
 
         // Find all offsets that can be interacted with
         final ArrayList<BlockPos> offsets = new ArrayList<>();
@@ -28,9 +28,9 @@ public class ProxDataUnits {
                 offsetLoop:
                 for (int z : anyAxisOffsets) {
                     BlockPos offset = new BlockPos(x, y, z);
-                    Vec3d offsetCenter = Vec3d.ofCenter(offset);
-                    for (Vec3d originPos : originPositions)
-                        if (originPos.squaredDistanceTo(offsetCenter) > 6.0 * 6.0)
+                    Vec3 offsetCenter = Vec3.atCenterOf(offset);
+                    for (Vec3 originPos : originPositions)
+                        if (originPos.distanceToSqr(offsetCenter) > 6.0 * 6.0)
                             continue offsetLoop; // Too far to interact with
 
                     offsets.add(offset);
@@ -102,15 +102,15 @@ public class ProxDataUnits {
         return reader.getBytes();
     }
 
-    public static BlockPos proxDataUnitToBlockPos(PlayerEntity player, int offsetIndex) {
-        final Vec3d eyePos = player.getEyePos();
-        final BlockPos eyeBlockPos = new BlockPos(MathHelper.floor(eyePos.getX()), MathHelper.floor(eyePos.getY()), MathHelper.floor(eyePos.getZ()));
-        return eyeBlockPos.add(ALL_OFFSETS[offsetIndex]);
+    public static BlockPos proxDataUnitToBlockPos(Player player, int offsetIndex) {
+        final Vec3 eyePos = player.getEyePosition();
+        final BlockPos eyeBlockPos = new BlockPos(Mth.floor(eyePos.x()), Mth.floor(eyePos.y()), Mth.floor(eyePos.z()));
+        return Yib.blockPosAdd(eyeBlockPos, ALL_OFFSETS[offsetIndex]);
     }
 
-    public static int blockPosToProxDataUnit(PlayerEntity player, BlockPos blockPos) {
-        final Vec3d eyePos = player.getEyePos();
-        final BlockPos eyeBlockPos = new BlockPos(MathHelper.floor(eyePos.getX()), MathHelper.floor(eyePos.getY()), MathHelper.floor(eyePos.getZ()));
+    public static int blockPosToProxDataUnit(Player player, BlockPos blockPos) {
+        final Vec3 eyePos = player.getEyePosition();
+        final BlockPos eyeBlockPos = new BlockPos(Mth.floor(eyePos.x()), Mth.floor(eyePos.y()), Mth.floor(eyePos.z()));
 
         BlockPos offset = blockPos.subtract(eyeBlockPos);
         return ALL_OFFSETS_LOOKUP_MAP.getOrDefault(offset, -1);
