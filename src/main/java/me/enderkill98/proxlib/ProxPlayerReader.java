@@ -1,8 +1,8 @@
 package me.enderkill98.proxlib;
 
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -18,7 +18,7 @@ public class ProxPlayerReader {
     private int magicBytesPos = 0;
     private @Nullable BlockPos assumedPlayerEyeBlockPos = null;
     private ProxDataUnitReader dataReader = null;
-    private Tuple<Integer/*Length (3 byte)*/, @Nullable Short/*Id (2 byte)*/> dataHeader = null;
+    private Pair<Integer/*Length (3 byte)*/, @Nullable Short/*Id (2 byte)*/> dataHeader = null;
     private long lastReceivedAt = -1L;
     private final ArrayList<ProxPacketReceiveHandler> handlers = new ArrayList<>();
 
@@ -101,16 +101,16 @@ public class ProxPlayerReader {
             byte[] bytes = dataReader.getBytes();
             // If not "& 0xFF"'ing, any byte with the highest bit in a bight can make the whole Integer negative for some reason!!!!!!!!
             int expectedLength = ((bytes[0] & 0xFF) << 16) | ((bytes[1] & 0xFF) << 8) | (bytes[2] & 0xFF);
-            dataHeader = new Tuple<>(expectedLength, null);
-        }else if(totalBytes >= 5 && dataHeader != null && dataHeader.getB() == null) {
+            dataHeader = new Pair<>(expectedLength, null);
+        }else if(totalBytes >= 5 && dataHeader != null && dataHeader.getSecond() == null) {
             // Got enough data to figure out the id
             byte[] bytes = dataReader.getBytes();
             short id = (short) (((bytes[3+0] & 0xFF) << 8) | (bytes[3+1] & 0xFF));
-            dataHeader.setB(id);
-        }else if(dataHeader != null && dataHeader.getB() != null && totalBytes >= 3+dataHeader.getA()) {
+            dataHeader.mapSecond(_ -> id);
+        }else if(dataHeader != null && dataHeader.getSecond() != null && totalBytes >= 3+dataHeader.getFirst()) {
             // All data got read
-            int expectedLength = dataHeader.getA();
-            @Nullable Short packedId = dataHeader.getB();
+            int expectedLength = dataHeader.getFirst();
+            @Nullable Short packedId = dataHeader.getSecond();
             if(expectedLength < 2 || packedId == null) {
                 LOGGER.warn("Packet received from {} was too small (length was: {} and packed Id {})!", player.getGameProfile().name(), expectedLength, packedId);
                 dataReader = null;
