@@ -1,6 +1,6 @@
 plugins {
     `maven-publish`
-    id("net.fabricmc.fabric-loom") version "1.15.5"
+    id("net.fabricmc.fabric-loom")
 }
 
 class ModData {
